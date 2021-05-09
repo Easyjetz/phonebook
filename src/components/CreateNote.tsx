@@ -8,11 +8,16 @@ type CreateNoteProps = {
   notes: INoteItem[];
 }
 
+export interface IErrMesage {
+  name: string;
+  id: number;
+}
+
 export const CreateNote: React.FC<CreateNoteProps> = ({addNoteItem, notes}) => {
 
   const [name, setName] = useState<string>('');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
-  const [error, setError] = useState<string[]>([]);
+  const [error, setError] = useState<IErrMesage[]>([]);
 
 
   const changeNameHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,15 +54,15 @@ export const CreateNote: React.FC<CreateNoteProps> = ({addNoteItem, notes}) => {
     setError([]);
 
     if (!isValidName) {
-      setError(errors => [...errors, 'Пожалуйста, введите ФИО корректно, пример: Иванов Иван Иванович']);
+      setError(errors => [...errors, {name: 'Пожалуйста, введите ФИО корректно, пример: Иванов Иван Иванович', id: 0}]);
     }
     
     if (!isValidPhoneNumber) {
-      setError(errors => [...errors, 'Пожалуйста, введите российский номер, пример формата: +79261234567 или 123-45-67 ']);
+      setError(errors => [...errors, {name: 'Пожалуйста, введите российский номер, пример формата: +79261234567 или 123-45-67', id: 1}]);
     }
 
     if (isNameOrPhoneExist) {
-      setError(errors => [...errors, 'Указанные Вами данные уже содержатся в справочнике']);
+      setError(errors => [...errors, {name: 'Указанные Вами данные уже содержатся в справочнике', id: 2}]);
     }
 
     e.preventDefault();
@@ -66,7 +71,7 @@ export const CreateNote: React.FC<CreateNoteProps> = ({addNoteItem, notes}) => {
   return (
     <div className="createNote">
       <h2>Добавить запись</h2>
-      {error.length > 0 && <ErrorMessage message={error} />}
+      {error.length > 0 && <ErrorMessage errors={error} />}
       <form>
         <div>
           <div className="createNote__item">

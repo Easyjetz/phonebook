@@ -1,16 +1,17 @@
 import React from 'react';
+import { IErrMesage } from './CreateNote';
 
 
 type ErrorMessageProps = {
-  message: string[];
+  errors: IErrMesage[]
 }
 
-export const ErrorMessage: React.FC<ErrorMessageProps> = ({ message }) => {
+export const ErrorMessage: React.FC<ErrorMessageProps> = ({ errors }) => {
 
 
   return (
     <div className="errorMessage">
-      {message.map(err => <p>{err}</p>)}
+      {errors.map(err => <p key={err.id}>{err.name}</p>)}
     </div>
   )
 }
