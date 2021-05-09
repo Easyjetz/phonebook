@@ -1,5 +1,8 @@
-import { INoteItem } from './../context/phoneBookContext';
+
 import { useEffect, useState } from "react"
+import { INoteItem } from "../App";
+
+
 
 
 export const usePhoneBook = () => {
@@ -18,6 +21,28 @@ export const usePhoneBook = () => {
     localStorage.setItem('phoneNotes', JSON.stringify(filteredNotes));
   }
 
+  const findNotes = (name: string) => {
+    const notes = JSON.parse(localStorage.getItem('phoneNotes') || '[]');
+    const copy = notes.slice();
+    const newNotes = name.length > 0 ?
+        copy.filter((i: INoteItem) => i.name.toLowerCase().includes(name))
+        .sort((a: INoteItem, b: INoteItem) => {
+          if (a.name.toLowerCase().indexOf(name) > b.name.toLowerCase().indexOf(name)) {
+            return 1;
+          }
+          if (a.name.toLowerCase().indexOf(name) < b.name.toLowerCase().indexOf(name)) {
+            return -1;
+          }
+          return 0;
+        })
+      :
+      notes;
+
+    setNotes(newNotes);
+  }
+
+
+
   useEffect(() => {
     const notes = JSON.parse(localStorage.getItem('phoneNotes') || '[]');
     if (notes) {
@@ -25,5 +50,5 @@ export const usePhoneBook = () => {
     }
   }, []);
 
-  return { notes, addNoteItem, deleteNoteItem };
+  return { notes, addNoteItem, deleteNoteItem, findNotes };
 }

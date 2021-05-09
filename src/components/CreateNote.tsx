@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { INoteItem } from '../context/phoneBookContext';
-import { Notification } from './Notification';
+import { INoteItem } from '../App';
+import { ErrorMessage } from './ErrorMessage';
 
 
 type CreateNoteProps = {
@@ -28,19 +28,22 @@ export const CreateNote: React.FC<CreateNoteProps> = ({addNoteItem, notes}) => {
   }
 
   const addNote = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const isValidName = /^[А-ЯЁ][а-яё]+ [А-ЯЁ][а-яё]+ [А-ЯЁ][а-яё]+$/.test(name);
+    const filterName: string = name.trim();
+    const isValidName = /^[А-ЯЁ][а-яё]+(-[А-ЯЁ][а-яё]+)? [А-ЯЁ][а-яё]+( [А-ЯЁ][а-яё]+)?$/.test(filterName);
     const isValidPhoneNumber = /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/.test(phoneNumber);
 
     const isNameOrPhoneExist = notes.reduce((acc: boolean, item: INoteItem) => {
-      if ((item.name === name) || (item.phoneNumber === phoneNumber)) {
+
+      const number = item.phoneNumber.replace(/[^0-9]/g, '');
+      const newNumber = phoneNumber.replace(/[^0-9]/g, '');
+      if ((item.name === name) || (number === newNumber)) {
         return true;
       } return acc;
     }, false);
-    // number validation
-    // name or phone already exist in note - вроде сделал
+
     if (isValidName && !isNameOrPhoneExist && isValidPhoneNumber) {
       const id = notes.length === 0 ? 1 : notes[notes.length - 1].id + 1
-      addNoteItem({ name, phoneNumber, id });
+      addNoteItem({ name: filterName, phoneNumber, id });
     }
 
     setError([]);
@@ -60,39 +63,38 @@ export const CreateNote: React.FC<CreateNoteProps> = ({addNoteItem, notes}) => {
     e.preventDefault();
   }
 
-  console.log(error.length);
-
-
   return (
     <div className="createNote">
       <h2>Добавить запись</h2>
-      {error.length > 0 && <Notification success={false} message={error} />}
+      {error.length > 0 && <ErrorMessage message={error} />}
       <form>
         <div>
           <div className="createNote__item">
             <label className="createNote__label" htmlFor="name"> Фамилия Имя Отчество:</label>
             <input
-              className="createNote__input"
+              className="input"
               type="text"
               id="name"
-              maxLength={60}
+              maxLength={45}
               value={name}
               onChange={changeNameHandler}
+              pattern="^[А-ЯЁ][а-яё]+(-[А-ЯЁ][а-яё]+)? [А-ЯЁ][а-яё]+( [А-ЯЁ][а-яё]+)?$"
               placeholder="Введите ФИО" />
           </div>
           <div className="createNote__item">
             <label className="createNote__label" htmlFor="tel">Номер телефона:</label>
             <input
-              className="createNote__input"
+              className="input"
               id="tel"
               type="tel"
               value={phoneNumber}
               maxLength={20}
+              pattern="^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$"
               onChange={changePhoneNumberHandler}
               placeholder="Введите номер" />
           </div>
         </div>
-        <button className="createNote__button" onClick={addNote} >Добавить</button>
+        <button className="button" onClick={addNote} >Добавить</button>
       </form>
     </div>
   );

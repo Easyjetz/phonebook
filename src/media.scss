@@ -1,0 +1,29 @@
+@media (max-width: 970px) {
+    .noteList__header p {
+        width: 47%;
+    }
+}
+
+@media (max-width: 776px) {
+    .noteList__header p {
+        width: 44%;
+    }
+}
+
+@media (max-width: 556px) {
+    .noteList {
+        &__item {
+            display: block;
+            text-align: center;
+            span {
+                display: block;
+            }
+        }
+        &__name, &__number {
+            width: 100%;
+        }
+        &__number {
+            margin: 20px 0;
+        }
+    }
+}
