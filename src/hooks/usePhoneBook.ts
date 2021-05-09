@@ -1,6 +1,6 @@
+import { INoteItem } from './../App';
 
 import { useEffect, useState } from "react"
-import { INoteItem } from "../App";
 
 
 
@@ -16,8 +16,11 @@ export const usePhoneBook = () => {
   }
 
   const deleteNoteItem = (note: INoteItem) => {
-    const filteredNotes = notes.filter(i => i.id !== note.id);
-    setNotes(filteredNotes);
+    const nowNotes = notes.filter((i: INoteItem) => i.id !== note.id);
+    const localNotes = JSON.parse(localStorage.getItem('phoneNotes') || '[]');
+    const filteredNotes = localNotes.filter((i: INoteItem) => i.id !== note.id);
+  
+    setNotes(nowNotes);
     localStorage.setItem('phoneNotes', JSON.stringify(filteredNotes));
   }
 
@@ -40,8 +43,6 @@ export const usePhoneBook = () => {
 
     setNotes(newNotes);
   }
-
-
 
   useEffect(() => {
     const notes = JSON.parse(localStorage.getItem('phoneNotes') || '[]');
