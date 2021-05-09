@@ -29,7 +29,7 @@ export const CreateNote: React.FC<CreateNoteProps> = ({addNoteItem, notes}) => {
 
   const addNote = (e: React.MouseEvent<HTMLButtonElement>) => {
     const filterName: string = name.trim();
-    const isValidName = /^[А-ЯЁA-Z][a-zа-яё]+(-[A-ZА-ЯЁ][а-яё]+)? [A-ZА-ЯЁ][a-zа-яё]+( [A-ZА-ЯЁ][a-zа-яё]+)?$/.test(filterName);
+    const isValidName = /^\s*[А-ЯЁA-Z][a-zа-яё]+(-[A-ZА-ЯЁ][a-zа-яё]+)? [A-ZА-ЯЁ][a-zа-яё]+( [A-ZА-ЯЁ][a-zа-яё]+)?\s*$/.test(filterName);
     const isValidPhoneNumber = /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/.test(phoneNumber);
 
     const isNameOrPhoneExist = notes.reduce((acc: boolean, item: INoteItem) => {
@@ -78,7 +78,7 @@ export const CreateNote: React.FC<CreateNoteProps> = ({addNoteItem, notes}) => {
               maxLength={45}
               value={name}
               onChange={changeNameHandler}
-              pattern="^[А-ЯЁA-Z][a-zа-яё]+(-[A-ZА-ЯЁ][а-яё]+)? [A-ZА-ЯЁ][a-zа-яё]+( [A-ZА-ЯЁ][a-zа-яё]+)?$"
+              pattern="^\s*[А-ЯЁA-Z][a-zа-яё]+(-[A-ZА-ЯЁ][a-zа-яё]+)? [A-ZА-ЯЁ][a-zа-яё]+( [A-ZА-ЯЁ][a-zа-яё]+)?\s*$"
               placeholder="Введите ФИО" />
           </div>
           <div className="createNote__item">
